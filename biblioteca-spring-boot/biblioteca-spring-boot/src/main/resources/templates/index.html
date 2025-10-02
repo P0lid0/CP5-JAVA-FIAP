@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Biblioteca</title>
+    <link rel="stylesheet" th:href="@{/static.css}"/>
+</head>
+<body>
+<h1>Biblioteca</h1>
+
+<h2>Empréstimos ativos</h2>
+<div th:if="${#lists.isEmpty(emprestimosAtivos)}">Nenhum ativo.</div>
+<table th:if="${!#lists.isEmpty(emprestimosAtivos)}">
+    <thead>
+    <tr>
+        <th>Livro</th><th>Usuário</th><th>Retirada</th><th>Prevista</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${emprestimosAtivos}">
+        <td th:text="${e.livro != null ? e.livro.titulo : '-'}"></td>
+        <td th:text="${e.usuario != null ? e.usuario.nome : '-'}"></td>
+        <td th:text="${e.dataRetirada}"></td>
+        <td th:text="${e.dataPrevistaDevolucao}"></td>
+    </tr>
+    </tbody>
+</table>
+<p><a th:href="@{/emprestimos/ativos}">Ver todos os ativos</a></p>
+
+<h2>Livros disponíveis</h2>
+<div th:if="${#lists.isEmpty(livrosDisponiveis)}">Nenhum disponível.</div>
+<table th:if="${!#lists.isEmpty(livrosDisponiveis)}">
+    <thead>
+    <tr>
+        <th>Título</th><th>Autor</th><th>Ano</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="l : ${livrosDisponiveis}">
+        <td th:text="${l.titulo}"></td>
+        <td th:text="${l.autor}"></td>
+        <td th:text="${l.anoPublicacao}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    <a th:href="@{/livros}">Gerenciar livros</a> |
+    <a th:href="@{/usuarios}">Usuários</a>
+</p>
+</body>
+</html>

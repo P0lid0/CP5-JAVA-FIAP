@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Livros</title>
+    <link rel="stylesheet" th:href="@{/css/static.css}">
+</head>
+<body>
+<h1>Livros cadastrados</h1>
+
+<a href="/" style="margin-bottom: 15px; display: inline-block;">🏠 Voltar para Home</a>
+<br>
+<a href="/livros/novo">➕ Cadastrar novo livro</a>
+
+<hr>
+
+<!-- Mensagem se não houver livros -->
+<div th:if="${#lists.isEmpty(livros)}">
+    <p>Nenhum livro cadastrado ainda.</p>
+</div>
+
+<!-- Tabela se houver livros -->
+<table th:if="${!#lists.isEmpty(livros)}" border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Ano</th>
+        <th>Status</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="l : ${livros}">
+        <td th:text="${l.id}">1</td>
+        <td th:text="${l.titulo}">Título</td>
+        <td th:text="${l.autor}">Autor</td>
+        <td th:text="${l.anoPublicacao}">2024</td>
+        <td th:text="${l.status}">DISPONIVEL</td>
+        <td>
+            <!-- Editar -->
+            <a th:href="@{/livros/{id}/editar(id=${l.id})}">✏️ Editar</a>
+
+            <!-- Emprestar -->
+            <form th:if="${l.status != null and l.status.name() == 'DISPONIVEL'}"
+                  th:action="@{/livros/{id}/emprestar(id=${l.id})}" method="post"
+                  style="display:inline">
+                <button type="submit">📚 Emprestar</button>
+            </form>
+
+            <!-- Devolver -->
+            <form th:if="${l.status != null and l.status.name() == 'EMPRESTADO'}"
+                  th:action="@{/livros/{id}/devolver(id=${l.id})}" method="post"
+                  style="display:inline">
+                <button type="submit">✅ Devolver</button>
+            </form>
+
+            <!-- Excluir -->
+            <form th:action="@{/livros/{id}/excluir(id=${l.id})}" method="post"
+                  style="display:inline"
+                  onsubmit="return confirm('Tem certeza que deseja excluir este livro?');">
+                <button type="submit">❌ Excluir</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

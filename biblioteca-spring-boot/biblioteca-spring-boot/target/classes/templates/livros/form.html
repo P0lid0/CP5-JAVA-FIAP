@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${livro.id} == null ? 'Novo livro' : 'Editar livro'">Livro</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/}">Início</a> |
+    <a th:href="@{/livros}">Livros</a> |
+    <a th:href="@{/usuarios}">Usuários</a> |
+    <a th:href="@{/emprestimos}">Empréstimos</a>
+</header>
+
+<h1 th:text="${livro.id} == null ? 'Novo livro' : 'Editar livro'">Livro</h1>
+
+<!-- Mensagens de feedback -->
+<div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
+
+<!-- O th:object deve estar aqui no form -->
+<form th:action="@{/livros/salvar}" th:object="${livro}" method="post">
+
+    <!-- Agora esse cara funciona -->
+    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+        Corrija os erros antes de salvar.
+    </div>
+
+    <input type="hidden" th:if="*{id}" th:field="*{id}"/>
+
+    <div>
+        <label for="titulo">Título</label>
+        <input id="titulo" type="text" th:field="*{titulo}" required>
+        <span class="field-error" th:errors="*{titulo}"></span>
+    </div>
+
+    <div>
+        <label for="autor">Autor</label>
+        <input id="autor" type="text" th:field="*{autor}" required>
+        <span class="field-error" th:errors="*{autor}"></span>
+    </div>
+
+    <div>
+        <label for="anoPublicacao">Ano de publicação</label>
+        <input id="anoPublicacao" type="number" min="1" th:field="*{anoPublicacao}" required>
+        <span class="field-error" th:errors="*{anoPublicacao}"></span>
+    </div>
+
+    <div>
+        <label for="status">Status</label>
+        <select id="status" th:field="*{status}">
+            <option th:value="DISPONIVEL">DISPONÍVEL</option>
+            <option th:value="EMPRESTADO">EMPRESTADO</option>
+        </select>
+        <span class="field-error" th:errors="*{status}"></span>
+    </div>
+
+    <div>
+        <button type="submit">Salvar</button>
+        <a th:href="@{/livros}">Cancelar</a>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Empréstimo</title>
+</head>
+<body>
+<header>
+    <a th:href="@{/}">Início</a> |
+    <a th:href="@{/livros}">Livros</a> |
+    <a th:href="@{/usuarios}">Usuários</a> |
+    <a th:href="@{/emprestimos}">Empréstimos</a>
+</header>
+
+<h1 th:text="${emprestimo.id} == null ? 'Novo Empréstimo' : 'Editar Empréstimo'">Novo Empréstimo</h1>
+
+<form th:action="@{/emprestimos/salvar}" th:object="${emprestimo}" method="post">
+
+    <!-- Campo oculto para edição -->
+    <input type="hidden" th:if="*{id}" th:field="*{id}"/>
+
+    <div>
+        <label for="livro">Livro</label>
+        <select id="livro" th:field="*{livro.id}" required>
+            <option value="">-- Selecione um livro --</option>
+            <option th:each="l : ${livros}" th:value="${l.id}" th:text="${l.titulo}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="usuario">Usuário</label>
+        <select id="usuario" th:field="*{usuario.id}" required>
+            <option value="">-- Selecione um usuário --</option>
+            <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nome}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="dataRetirada">Data de Retirada</label>
+        <input id="dataRetirada" type="date" th:field="*{dataRetirada}" required>
+    </div>
+
+    <div>
+        <label for="dataPrevistaDevolucao">Data Prevista de Devolução</label>
+        <input id="dataPrevistaDevolucao" type="date" th:field="*{dataPrevistaDevolucao}" required>
+    </div>
+
+    <div>
+        <button type="submit">Salvar</button>
+        <a th:href="@{/emprestimos}">Cancelar</a>
+    </div>
+</form>
+</body>
+</html>
